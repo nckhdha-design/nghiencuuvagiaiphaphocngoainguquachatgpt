@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng Dụng Nghiên Cứu Ngoại Ngữ - AI & Góc Luyện Tập</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script type="module">
+        import * as lucide from 'https://unpkg.com/lucide@latest';
+        window.lucide = lucide;
+
+        document.addEventListener('DOMContentLoaded', () => {
+             if (window.lucide && window.lucide.createIcons) {
+                window.lucide.createIcons();
+            }
+        });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            overflow: hidden;
+        }
+        
+        .tab-button { transition: all 0.3s; border-radius: 0.5rem 0.5rem 0 0; }
+        .tab-button.active { background-color: #ffffff; color: #4f46e5; border-bottom: 3px solid #4f46e5; }
+        .card { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        .details-summary { padding: 1rem 1.5rem; font-weight: 600; cursor: pointer; display: block; }
+        .details-summary::-webkit-details-marker { display: none; }
+        .details-content { padding: 1.5rem; background-color: #ffffff; }
+        .text-primary { color: #4f46e5; }
+        .text-secondary { color: #14b8a6; }
+        .text-accent-red { color: #ef4444; }
+        
+        .whitespace-pre-wrap {
+            white-space: pre-wrap;
+        }
+
+        .sidebar-button {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            color: #374151;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+        }
+        .sidebar-button:hover {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .sidebar-button.active {
+            background-color: #eef2ff;
+            color: #4f46e5;
+            font-weight: 600;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .sidebar-button.active svg {
+            color: #4f46e5;
+        }
+        .sidebar-button svg {
+            color: #6b7280;
+            transition: color 0.2s;
+            margin-right: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .details-content table { font-size: 0.75rem; }
+            .details-content th, .details-content td { padding-left: 0.25rem; padding-right: 0.25rem; }
+            .chart-container { height: 280px; max-height: 300px; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="flex h-screen bg-slate-50">
+
+        <aside id="sidebar" class="w-64 bg-white shadow-xl h-full fixed md:static -translate-x-full md:translate-x-0 transition-transform z-30 overflow-y-auto">
+            <div class="p-5 border-b">
+                <h2 class="text-xl font-bold text-indigo-700 flex items-center">
+                    <svg data-lucide="brain-circuit" class="w-6 h-6 mr-2"></svg>
+                    AI Research
+                </h2>
+                <p class="text-xs text-gray-500 mt-1">Học Ngoại ngữ & ChatGPT</p>
+            </div>
+            
+            <nav class="mt-4 px-3">
+                <ul class="space-y-1">
+                    <li><a href="#overview" class="sidebar-button group active" data-tab="overview">
+                        <svg data-lucide="layout-dashboard"></svg> Tổng Quan
+                    </a></li>
+                    <li><a href="#research" class="sidebar-button group" data-tab="research">
+                        <svg data-lucide="database"></svg> Dữ Liệu Nghiên Cứu
+                    </a></li>
+                    <li><a href="#game" class="sidebar-button group" data-tab="game">
+                        <svg data-lucide="bot"></svg> Góc Luyện Tập AI
+                    </a></li>
+                    
+                    <li class="pt-4 mt-4 border-t border-gray-200">
+                        <span class="px-2 text-xs font-semibold text-gray-500 uppercase">Thông Tin Thêm</span>
+                    </li>
+                    
+                    <li><a href="#gioithieu" class="sidebar-button group" data-tab="gioithieu">
+                        <svg data-lucide="info"></svg> Giới thiệu
+                    </a></li>
+                    <li><a href="#huongdan" class="sidebar-button group" data-tab="huongdan">
+                        <svg data-lucide="book-open-check"></svg> Hướng dẫn sử dụng
+                    </a></li>
+                    <li><a href="#hoatdongmo" class="sidebar-button group" data-tab="hoatdongmo">
+                        <svg data-lucide="lightbulb"></svg> Hoạt động mở
+                    </a></li>
+                    <li><a href="#lienhe" class="sidebar-button group" data-tab="lienhe">
+                        <svg data-lucide="mail"></svg> Liên hệ
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 md:hidden hidden"></div>
+
+        <div class="flex-1 flex flex-col overflow-y-auto">
+            
+            <header class="bg-white shadow-md sticky top-0 z-10">
+                <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div class="flex items-center justify-between">
+                        <button id="mobile-menu-toggle" class="md:hidden p-2 -ml-2 text-gray-700 rounded-md hover:bg-gray-100">
+                            <svg data-lucide="menu" class="w-6 h-6"></svg>
+                        </button>
+                        
+                        <h1 class="text-base sm:text-xl md:text-2xl font-bold text-indigo-700 truncate max-w-xs sm:max-w-md md:max-w-full">THÁI ĐỘ, NHẬN THỨC CỦA HỌC SINH PHỔ THÔNG...</h1> 
+                        
+                        <div class="w-6 md:hidden"></div> 
+                    </div>
+                </div>
+            </header>
+
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+                
+                <!-- TAB TỔNG QUAN -->
+                <div id="content-overview" class="tab-content space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
+                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Tổng Quan Nghiên Cứu & Ứng Dụng</h2>
+                        <p class="text-gray-600 leading-relaxed">Dưới đây là kết quả khảo sát "Thái độ và Nhận thức của học sinh Phổ thông về việc học ngoại ngữ qua ChatGPT" và ý tưởng xây dựng mô hình ứng dụng học Ngoại ngữ cho học sinh phổ thông. Em đã trình bày dữ liệu khảo sát trên cỡ mẫu N=100 qua các chỉ số và biểu đồ chính.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-xl card flex flex-col items-center justify-center border-b-4 border-indigo-500">
+                            <div class="text-5xl font-extrabold text-indigo-600" id="stat-pu">0.00</div>
+                            <div class="text-lg font-medium text-gray-500 mt-2">Tính Hữu Ích Cảm Nhận</div>
+                            <div class="text-sm text-gray-400 mt-1">Đánh giá cao khả năng Viết.</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl card flex flex-col items-center justify-center border-b-4 border-teal-500">
+                            <div class="text-5xl font-extrabold text-teal-600" id="stat-peou">0.00</div>
+                            <div class="text-lg font-medium text-gray-500 mt-2">Tính Dễ Sử Dụng</div>
+                            <div class="text-sm text-gray-400 mt-1">Giao diện đơn giản, dễ thao tác.</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl card flex flex-col items-center justify-center border-b-4 border-indigo-300">
+                            <div class="text-5xl font-extrabold text-indigo-400" id="stat-at">0.00</div>
+                            <div class="text-lg font-medium text-gray-500 mt-2">Thái Độ Tích Cực</div>
+                            <div class="text-sm text-gray-400 mt-1">Hứng thú và xem là trải nghiệm thú vị.</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl card flex flex-col items-center justify-center border-b-4 border-red-500">
+                            <div class="text-5xl font-extrabold text-red-600" id="stat-erp">0.00</div>
+                            <div class="text-lg font-medium text-gray-500 mt-2">Nhận thức Rủi ro</div>
+                            <div class="text-sm text-gray-400 mt-1">Lo ngại cao về sự phụ thuộc.</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl card flex flex-col">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800">So sánh Nhận thức (PU vs PEOU)</h3>
+                            <p class="text-sm text-gray-500 mb-4">Biểu đồ so sánh điểm trung bình giữa Tính Hữu Ích và Tính Dễ Sử Dụng cảm nhận. PEOU cao hơn cho thấy nền tảng AI dễ dàng tiếp cận người dùng.</p>
+                            <div class="chart-container flex-grow">
+                                <canvas id="chart-pu-peou"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl card flex flex-col">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800">Thái độ và Rủi ro (AT vs ERP)</h3>
+                            <p class="text-sm text-gray-500 mb-4">Mối quan hệ giữa Thái độ tích cực (AT) và mức độ Nhận thức rủi ro (ERP). Sự chênh lệch giữa hai yếu tố này là nền tảng cho hành vi sử dụng.</p>
+                            <div class="chart-container flex-grow">
+                                <canvas id="chart-at-erp"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card border-t-4 border-teal-500">
+                        <h2 class="text-3xl font-bold mb-4 text-teal-700">Mô Hình Luyện tập 4 kỹ năng</h2>
+                        <p class="text-gray-600 leading-relaxed mb-4">Em mong muốn phát triển một ứng dụng học ngoại ngữ tích hợp rèn luyện 4 kỹ năng Nghe, Nói, Đọc, Viết, trong đó tăng cường Hội thoại – khía cạnh được đánh giá thấp nhất trong kết quả Khảo sát. Học sinh có thể tự tải lên hoặc dán bài tập để trợ lý AI hỗ trợ giải đáp trực tiếp.</p>
+                        <button onclick="changeTab('game')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-lg transition duration-200 shadow-md">
+                            Khám phá Góc Luyện Tập AI
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB DỮ LIỆU NGHIÊN CỨU -->
+                <div id="content-research" class="tab-content hidden space-y-8">
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 sm:p-8 rounded-xl card">
+                            <h2 class="text-3xl font-bold mb-4 text-indigo-700">Nghiên Cứu & Phân Tích Chuyên Sâu</h2>
+                            <p class="text-gray-600 leading-relaxed">Phần này em trình bày các bảng dữ liệu khảo sát chi tiết theo từng mục và hướng dẫn sử dụng AI có trách nhiệm.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl card mb-8">
+                            <h2 class="text-2xl font-semibold text-gray-800 p-6 border-b flex items-center">
+                                Kết quả nghiên cứu
+                            </h2>
+
+                            <details class="border-b" open>
+                                <summary class="details-summary bg-gray-50 hover:bg-gray-100">Chi tiết Dữ liệu Khảo sát (N=100)</summary>
+                                <div class="details-content space-y-6">
+                                    <p class="text-sm mb-3 text-gray-600">Dữ liệu tổng hợp khảo sát trên N=100 học sinh (Thang đo Likert 5 mức: 1=Hoàn toàn Không đồng ý đến 5=Hoàn toàn Đồng ý) cho từng phát biểu.</p>
+                            
+                                    <h4 class="text-lg font-semibold text-primary">1. Nhận thức về Tính hữu ích (Perceived Usefulness - PU)</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phát biểu (PU)</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(1) %</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(2) %</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(3) %</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(4) %</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(5) %</th>
+                                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trung bình</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                                <tr><td class="px-4 py-3 font-medium">PU4: Cải thiện kỹ năng Viết</td><td class="px-2 py-3 text-center">2.0%</td><td class="px-2 py-3 text-center">3.0%</td><td class="px-2 py-3 text-center">10.0%</td><td class="px-2 py-3 text-center">35.0%</td><td class="px-2 py-3 text-center font-bold text-primary">50.0%</td><td class="px-4 py-3 text-center font-bold text-primary">4.25</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">PU2: Hữu ích học từ vựng/ngữ pháp</td><td class="px-2 py-3 text-center">1.0%</td><td class="px-2 py-3 text-center">4.0%</td><td class="px-2 py-3 text-center">15.0%</td><td class="px-2 py-3 text-center font-bold">40.0%</td><td class="px-2 py-3 text-center font-bold text-primary">40.0%</td><td class="px-4 py-3 text-center font-bold text-primary">4.10</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">PU3: Giúp tiết kiệm thời gian</td><td class="px-2 py-3 text-center">3.0%</td><td class="px-2 py-3 text-center">8.0%</td><td class="px-2 py-3 text-center">18.0%</td><td class="px-2 py-3 text-center font-bold">38.0%</td><td class="px-2 py-3 text-center">33.0%</td><td class="px-4 py-3 text-center font-bold text-primary">3.95</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">PU5: Hỗ trợ luyện tập hội thoại (Nói)</td><td class="px-2 py-3 text-center">5.0%</td><td class="px-2 py-3 text-center">12.0%</td><td class="px-2 py-3 text-center">20.0%</td><td class="px-2 py-3 text-center font-bold">35.0%</td><td class="px-2 py-3 text-center">28.0%</td><td class="px-4 py-3 text-center font-bold text-gray-700">3.65</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">PU1: Giúp cải thiện điểm số</td><td class="px-2 py-3 text-center">6.0%</td><td class="px-2 py-3 text-center">15.0%</td><td class="px-2 py-3 text-center">24.0%</td><td class="px-2 py-3 text-center">30.0%</td><td class="px-2 py-3 text-center">25.0%</td><td class="px-4 py-3 text-center font-bold text-gray-700">3.50</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h4 class="text-lg font-semibold text-secondary mt-6">2. Nhận thức về Tính dễ sử dụng (Perceived Ease of Use - PEOU)</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phát biểu (PEOU)</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(1) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(2) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(3) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(4) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(5) %</th>
+                                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trung bình</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                                <tr><td class="px-4 py-3 font-medium">PEOU2: Giao diện thân thiện</td><td class="px-2 py-3 text-center">1.0%</td><td class="px-2 py-3 text-center">2.0%</td><td class="px-2 py-3 text-center">9.0%</td><td class="px-2 py-3 text-center font-bold">45.0%</td><td class="px-2 py-3 text-center font-bold text-secondary">43.0%</td><td class="px-4 py-3 text-center font-bold text-secondary">4.30</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">PEOU1: Rất dễ dàng sử dụng</td><td class="px-2 py-3 text-center">1.0%</td><td class="px-2 py-3 text-center">3.0%</td><td class="px-2 py-3 text-center">12.0%</td><td class="px-2 py-3 text-center font-bold">40.0%</td><td class="px-2 py-3 text-center font-bold text-secondary">44.0%</td><td class="px-4 py-3 text-center font-bold text-secondary">4.20</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">PEOU3: Dễ dàng tìm thấy câu trả lời</td><td class="px-2 py-3 text-center">2.0%</td><td class="px-2 py-3 text-center">5.0%</td><td class="px-2 py-3 text-center">10.0%</td><td class="px-2 py-3 text-center font-bold">48.0%</td><td class="px-2 py-3 text-center">35.0%</td><td class="px-4 py-3 text-center font-bold text-secondary">4.15</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h4 class="text-lg font-semibold text-primary mt-6">3. Thái độ sử dụng (Attitude toward Usage - AT)</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phát biểu (AT)</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(1) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(2) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(3) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(4) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(5) %</th>
+                                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trung bình</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                                <tr><td class="px-4 py-3 font-medium">AT2: Là một trải nghiệm thú vị</td><td class="px-2 py-3 text-center">1.0%</td><td class="px-2 py-3 text-center">3.0%</td><td class="px-2 py-3 text-center">6.0%</td><td class="px-2 py-3 text-center">40.0%</td><td class="px-2 py-3 text-center font-bold text-primary">50.0%</td><td class="px-4 py-3 text-center font-bold text-primary">4.35</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">AT1: Cảm thấy hứng thú và thích thú</td><td class="px-2 py-3 text-center">2.0%</td><td class="px-2 py-3 text-center">4.0%</td><td class="px-2 py-3 text-center">10.0%</td><td class="px-2 py-3 text-center">38.0%</td><td class="px-2 py-3 text-center font-bold text-primary">46.0%</td><td class="px-4 py-3 text-center font-bold text-primary">4.20</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">AT3: Tin rằng là một ý tưởng tốt</td><td class="px-2 py-3 text-center">1.0%</td><td class="px-2 py-3 text-center">5.0%</td><td class="px-2 py-3 text-center">15.0%</td><td class="px-2 py-3 text-center font-bold">40.0%</td><td class="px-2 py-3 text-center">39.0%</td><td class="px-4 py-3 text-center font-bold text-primary">4.15</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h4 class="text-lg font-semibold text-accent-red mt-6">4. Nhận thức về Rủi ro Đạo đức Học thuật (Ethics & Risk Perception - ERP)</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phát biểu (ERP)</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(1) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(2) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(3) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(4) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(5) %</th>
+                                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trung bình</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                                <tr><td class="px-4 py-3 font-medium">ERP2: Sợ bị phụ thuộc/lười tư duy</td><td class="px-2 py-3 text-center">2.0%</td><td class="px-2 py-3 text-center">5.0%</td><td class="px-2 py-3 text-center">15.0%</td><td class="px-2 py-3 text-center">35.0%</td><td class="px-2 py-3 text-center font-bold text-accent-red">43.0%</td><td class="px-4 py-3 text-center font-bold text-accent-red">4.10</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">ERP1: Lo lắng về gian lận học thuật</td><td class="px-2 py-3 text-center">5.0%</td><td class="px-2 py-3 text-center">10.0%</td><td class="px-2 py-3 text-center">20.0%</td><td class="px-2 py-3 text-center font-bold">35.0%</td><td class="px-2 py-3 text-center">30.0%</td><td class="px-4 py-3 text-center font-bold text-accent-red">3.85</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">ERP4: Giáo viên nên cấm sử dụng</td><td class="px-2 py-3 text-center font-bold text-gray-700">20.0%</td><td class="px-2 py-3 text-center">18.0%</td><td class="px-2 py-3 text-center">17.0%</td><td class="px-2 py-3 text-center">25.0%</td><td class="px-2 py-3 text-center">20.0%</td><td class="px-4 py-3 text-center font-bold text-gray-700">3.20</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium italic">ERP3: Luôn chính xác</td><td class="px-2 py-3 text-center font-bold text-gray-700">45.0%</td><td class="px-2 py-3 text-center font-bold text-gray-700">30.0%</td><td class="px-2 py-3 text-center">15.0%</td><td class="px-2 py-3 text-center">7.0%</td><td class="px-2 py-3 text-center">3.0%</td><td class="px-4 py-3 text-center font-bold text-gray-700">2.50</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                     <p class="text-xs text-gray-500 mt-2 italic">Lưu ý: Phát biểu ERP3 là phát biểu ngược, điểm trung bình thấp thể hiện nhận thức đúng đắn của học sinh.</p>
+
+                                    <h4 class="text-lg font-semibold text-secondary mt-6">5. Hành vi đối phó với Rủi ro (Risk Coping - RC)</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phát biểu (RC)</th>
+                                                    <th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(1) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(2) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(3) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(4) %</th><th class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">(5) %</th>
+                                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trung bình</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                                <tr><td class="px-4 py-3 font-medium">RC2: Chỉ dùng để sửa chữa (không viết hộ)</td><td class="px-2 py-3 text-center">2.0%</td><td class="px-2 py-3 text-center">8.0%</td><td class="px-2 py-3 text-center">15.0%</td><td class="px-2 py-3 text-center font-bold">40.0%</td><td class="px-2 py-3 text-center font-bold text-secondary">35.0%</td><td class="px-4 py-3 text-center font-bold text-secondary">4.05</td></tr>
+                                                <tr><td class="px-4 py-3 font-medium">RC1: Luôn kiểm tra lại thông tin</td><td class="px-2 py-3 text-center">5.0%</td><td class="px-2 py-3 text-center">10.0%</td><td class="px-2 py-3 text-center">25.0%</td><td class="px-2 py-3 text-center font-bold">35.0%</td><td class="px-2 py-3 text-center">25.0%</td><td class="px-4 py-3 text-center font-bold text-secondary">3.80</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </details>
+                            <details class="border-b"><summary class="details-summary bg-gray-50 hover:bg-gray-100">Hướng dẫn Sử dụng AI Có Trách nhiệm</summary><div class="details-content"><p class="font-bold mb-3 text-indigo-700">Các bước hành động thực tiễn cho học sinh:</p><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="p-4 bg-white rounded-lg border border-teal-300"><h4 class="font-semibold text-teal-700 mb-2">✅ Tự tải bài tập lên để AI hỗ trợ</h4><ul class="list-disc list-outside ml-5 text-gray-700 text-sm"><li>Chọn kỹ năng tương ứng (Nghe, Nói, Đọc, Viết).</li><li>Dán đề bài hoặc đoạn văn của bạn vào ô nhập liệu để AI giải thích hoặc sửa lỗi.</li><li>Luôn tự tư duy trước khi nhờ AI trợ giúp.</li></ul></div><div class="p-4 bg-white rounded-lg border border-red-300"><h4 class="font-semibold text-red-700 mb-2">❌ Kiểm soát Mức độ Phụ thuộc vào AI</h4><ul class="list-disc list-outside ml-5 text-gray-700 text-sm"><li>Không dùng để chép đáp án trực tiếp.</li><li>Luôn kiểm tra chéo thông tin.</li><li>Sau khi AI sửa bài Viết, hãy tự rút kinh nghiệm.</li></ul></div></div></div></details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB GÓC LUYỆN TẬP AI -->
+                <div id="content-game" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-xl card">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-indigo-700 flex items-center">
+                            <svg data-lucide="bot" class="w-8 h-8 mr-2 text-indigo-600"></svg>
+                            Góc Luyện Tập AI
+                        </h2>
+                        <p class="text-gray-500 mt-1">Tải lên hoặc dán bài tập của bạn để tương tác và nhận hướng dẫn từ trợ lý ảo Gemini.</p>
+                        
+                        <!-- Công cụ hỗ trợ -->
+                        <div class="mt-4 flex flex-wrap items-center gap-2 p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
+                            <span class="text-sm font-medium text-gray-600 flex items-center mr-2">
+                                <svg data-lucide="wrench" class="w-4 h-4 mr-1 text-indigo-500"></svg> Công cụ hỗ trợ:
+                            </span>
+                            <button onclick="game_handleToolAction('dictionary')" class="px-3 py-1.5 bg-white text-indigo-600 text-sm font-medium rounded-lg border border-indigo-200 shadow-sm hover:bg-indigo-50 transition flex items-center">
+                                <svg data-lucide="book-open" class="w-4 h-4 mr-1 text-indigo-500"></svg> Tra từ điển
+                            </button>
+                            <button onclick="game_handleToolAction('translate')" class="px-3 py-1.5 bg-white text-teal-600 text-sm font-medium rounded-lg border border-teal-200 shadow-sm hover:bg-teal-50 transition flex items-center">
+                                <svg data-lucide="languages" class="w-4 h-4 mr-1 text-teal-500"></svg> Dịch
+                            </button>
+                            <button onclick="game_handleToolAction('hint')" class="px-3 py-1.5 bg-white text-amber-600 text-sm font-medium rounded-lg border border-amber-200 shadow-sm hover:bg-amber-50 transition flex items-center">
+                                <svg data-lucide="lightbulb" class="w-4 h-4 mr-1 text-amber-500"></svg> Gợi ý
+                            </button>
+                            <button onclick="game_handleToolAction('save')" class="px-3 py-1.5 bg-white text-purple-600 text-sm font-medium rounded-lg border border-purple-200 shadow-sm hover:bg-purple-50 transition flex items-center">
+                                <svg data-lucide="bookmark" class="w-4 h-4 mr-1 text-purple-500"></svg> Lưu từ vựng
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Cột trái: Chọn kỹ năng -->
+                        <div class="lg:col-span-4 bg-white p-5 rounded-xl card space-y-4">
+                            <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">CHỌN KỸ NĂNG</h3>
+                            <div id="game-skill-list" class="space-y-2">
+                                <!-- Render bởi JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Cột phải: Giáo viên AI Gemini & Khung tương tác tải bài tập -->
+                        <div class="lg:col-span-8 bg-white p-6 rounded-xl card flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
+                                            <svg data-lucide="bot" class="w-6 h-6"></svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Giáo viên AI Gemini</h4>
+                                            <p class="text-xs text-indigo-600 font-medium" id="current-skill-indicator">Đang luyện: Nghe</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bong bóng chat hướng dẫn -->
+                                <div class="flex items-start space-x-3 bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-4">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0">
+                                        <svg data-lucide="bot" class="w-5 h-5"></svg>
+                                    </div>
+                                    <div class="text-gray-700 text-sm leading-relaxed">
+                                        Chào bạn! Hãy chọn kỹ năng bên trái, sau đó dán hoặc tải nội dung bài tập của bạn vào ô dưới đây để cô hướng dẫn, sửa lỗi hoặc chấm điểm nhé.
+                                    </div>
+                                </div>
+
+                                <!-- Khung động chứa phần nhập bài tập của học sinh -->
+                                <div id="game-app-container" class="space-y-4">
+                                    <!-- Render bởi JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <footer class="mt-6 text-center text-xs text-gray-400">
+                        <p>Phát triển bởi học sinh trường THCS Vạn Phúc</p>
+                    </footer>
+                </div>
+
+                <!-- TAB GIỚI THIỆU -->
+                <div id="content-gioithieu" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
+                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Giới Thiệu Dự Án</h2>
+                        <p class="text-gray-600 leading-relaxed">Chào mừng bạn đến với dự án nghiên cứu "Thái độ, Nhận thức của Học sinh Phổ thông trong việc học Ngoại ngữ qua ChatGPT".</p>
+                    </div>
+                </div>
+
+                <!-- TAB HƯỚNG DẪN -->
+                <div id="content-huongdan" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
+                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Hướng Dẫn Sử Dụng</h2>
+                        <p class="text-gray-600">Truy cập Góc Luyện Tập AI, chọn kỹ năng cần học và tự tải bài tập lên để AI hỗ trợ.</p>
+                    </div>
+                </div>
+
+                <!-- TAB HOẠT ĐỘNG MỞ -->
+                <div id="content-hoatdongmo" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
+                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Hoạt Động Mở Rộng</h2>
+                        <p class="text-gray-600">Tích hợp thêm các dạng bài tập thực tế từ sách giáo khoa.</p>
+                    </div>
+                </div>
+
+                <!-- TAB LIÊN HỆ -->
+                <div id="content-lienhe" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
+                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Liên Hệ</h2>
+                        <p class="text-gray-600">Nhóm học sinh trường THCS Vạn Phúc.</p>
+                    </div>
+                </div>
+
+            </main>
+        </div> 
+    </div>
+
+    <script>
+        const data = {
+            avg: { pu: 3.89, peou: 4.22, at: 4.17, erp: 3.41 },
+            puData: [4.25, 4.10, 3.95, 3.65, 3.50],
+            peouData: [4.30, 4.20, 4.15],
+            atErpData: [4.17, 3.41]
+        };
+
+        const chartColors = {
+            primary: '#4f46e5',
+            secondary: '#14b8a6',
+            accentRed: '#ef4444',
+            gray: '#d1d5db'
+        };
+
+        function initStats() {
+            const duration = 1500;
+            animateValue("stat-pu", 0, data.avg.pu, duration, 2);
+            animateValue("stat-peou", 0, data.avg.peou, duration, 2);
+            animateValue("stat-at", 0, data.avg.at, duration, 2);
+            animateValue("stat-erp", 0, data.avg.erp, duration, 2);
+        }
+
+        function animateValue(id, start, end, duration, decimals) {
+            const obj = document.getElementById(id);
+            if (!obj) return;
+            const range = end - start;
+            let current = start;
+            const increment = range / (duration / 10);
+            const timer = setInterval(() => {
+                current += increment;
+                if ((range > 0 && current >= end) || (range < 0 && current <= end)) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                obj.textContent = current.toFixed(decimals);
+            }, 10);
+        }
+
+        function initCharts() {
+            const ctxPuPeou = document.getElementById('chart-pu-peou')?.getContext('2d');
+            if (ctxPuPeou) {
+                new Chart(ctxPuPeou, {
+                    type: 'bar',
+                    data: {
+                        labels: ['PU4 (Viết)', 'PU2 (Từ Vựng)', 'PU3 (Tiết Kiệm)', 'PU5 (Hội Thoại)', 'PU1 (Điểm Số)', 'PEOU2 (Giao Diện)', 'PEOU1 (Dễ Dàng)', 'PEOU3 (Tìm Kiếm)'],
+                        datasets: [{
+                            label: 'Mức Độ Đồng Ý (1-5)',
+                            data: [...data.puData, ...data.peouData],
+                            backgroundColor: [
+                                chartColors.primary, chartColors.primary, chartColors.primary, chartColors.primary, chartColors.primary,
+                                chartColors.secondary, chartColors.secondary, chartColors.secondary
+                            ],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: { legend: { display: false }, title: { display: true, text: 'So Sánh Từng Item PU/PEOU (Điểm TB)', font: { size: 14, weight: 'bold' } } },
+                        scales: { x: { beginAtZero: true, max: 5.0, title: { display: true, text: 'Điểm Trung Bình (1-5)' } } }
+                    }
+                });
+            }
+
+            const ctxAtErp = document.getElementById('chart-at-erp')?.getContext('2d');
+            if (ctxAtErp) {
+                new Chart(ctxAtErp, {
+                    type: 'polarArea',
+                    data: {
+                        labels: ['Thái Độ Tích Cực', 'Nhận thức Rủi ro'],
+                        datasets: [{ data: data.atErpData, backgroundColor: [chartColors.primary, chartColors.accentRed], borderWidth: 1 }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'top' }, title: { display: true, text: 'Thái Độ vs Rủi Ro (Điểm TB Tổng Thể)', font: { size: 14, weight: 'bold' } } },
+                        scales: { r: { suggestedMin: 0, suggestedMax: 5, pointLabels: { display: true, centerPointLabels: true, font: { size: 14 } } } }
+                    }
+                });
+            }
+        }
+
+        let isGameInitialized = false;
+
+        function changeTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            const contentEl = document.getElementById(`content-${tabId}`);
+            if (contentEl) {
+                contentEl.classList.remove('hidden');
+            }
+
+            document.querySelectorAll('.sidebar-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            const activeBtn = document.querySelector(`.sidebar-button[data-tab="${tabId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+
+            if (tabId === 'game') {
+                if (!isGameInitialized) {
+                    game_renderApp();
+                    isGameInitialized = true;
+                } else {
+                    game_renderApp();
+                }
+            }
+
+            if (window.lucide && window.lucide.createIcons) {
+                window.lucide.createIcons();
+            }
+
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar && sidebar.classList.contains('fixed')) {
+                 sidebar.classList.add('-translate-x-full');
+                 overlay.classList.add('hidden');
+            }
+        }
+
+        // --- CẤU HÌNH API VÀ GÓC LUYỆN TẬP AI (HỌC SINH TẢI/DÁN BÀI TẬP) ---
+        const apiKey = "AQ.Ab8RN6JweyYe2SttwmT1K82gI4VnVwXDknn8KN0yypvd64pfGA";
+        const GAME_GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+        
+        const GAME_SKILLS = { 
+            LISTENING: { id: 'LISTENING', name: 'Nghe (Listening)', icon: 'Headphones', desc: 'Dán đoạn văn bản tiếng Anh để nhận phản hồi phân tích hoặc tạo phát âm luyện nghe.' }, 
+            SPEAKING: { id: 'SPEAKING', name: 'Nói (Speaking)', icon: 'Mic', desc: 'Dán đoạn hội thoại hoặc câu nói tiếng Anh để AI sửa ngữ pháp và cách diễn đạt.' }, 
+            READING: { id: 'READING', name: 'Đọc (Reading)', icon: 'BookOpen', desc: 'Dán bài đọc hiểu tiếng Anh để yêu cầu AI dịch nghĩa hoặc giải thích từ vựng khó.' }, 
+            WRITING: { id: 'WRITING', name: 'Viết (Writing)', icon: 'PenTool', desc: 'Dán bài luận/câu viết tiếng Anh của bạn để AI chấm điểm và sửa lỗi chi tiết.' } 
+        };
+        
+        let game_state = { 
+            activeSkillId: GAME_SKILLS.LISTENING.id, 
+            uploadedExercise: '', // Nội dung bài tập học sinh tải lên/dán vào
+            feedback: null, 
+            isLoading: false 
+        };
+        
+        const game_setState = (newState) => { 
+            game_state = { ...game_state, ...newState }; 
+            game_renderApp(); 
+        };
+
+        const game_submitExercise = async () => { 
+            const currentSkill = GAME_SKILLS[game_state.activeSkillId]; 
+            if (!game_state.uploadedExercise.trim()) { 
+                game_setState({ feedback: { type: 'warning', message: 'Vui lòng nhập hoặc dán nội dung bài tập của bạn vào ô bên dưới trước khi gửi nhé!' } }); 
+                return; 
+            } 
+            game_setState({ isLoading: true, feedback: null }); 
+            
+            const prompt = `Bạn là một giáo viên tiếng Anh AI chuyên nghiệp. Học sinh đang luyện tập kỹ năng [${currentSkill.name}] với nội dung bài tập/câu trả lời tự tải lên như sau:\n\n"""\n${game_state.uploadedExercise}\n"""\n\nHãy phân tích, nhận xét, sửa lỗi (nếu có) và đưa ra gợi ý cải thiện bằng tiếng Việt với giọng điệu thân thiện, khích lệ.`; 
+            
+            try { 
+                const response = await fetch(GAME_GEMINI_API_URL, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) 
+                }); 
+                const result = await response.json(); 
+                const reviewText = result.candidates?.[0]?.content?.parts?.[0]?.text; 
+                game_setState({ feedback: { type: 'success', message: reviewText || 'Không nhận được phản hồi từ AI.' }, isLoading: false }); 
+            } catch (error) { 
+                console.error('Lỗi khi gửi bài tập:', error); 
+                game_setState({ feedback: { type: 'error', message: 'Không thể kết nối đến API. Vui lòng kiểm tra lại.' }, isLoading: false }); 
+            } 
+        };
+
+        const game_handleSkillChange = (skillId) => { 
+            if (skillId === game_state.activeSkillId) return; 
+            game_setState({ activeSkillId: skillId, feedback: null, uploadedExercise: '' }); 
+        };
+
+        const game_handleFileUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                game_setState({ uploadedExercise: e.target.result });
+            };
+            reader.readAsText(file);
+        };
+
+        const game_handleToolAction = (action) => {
+            alert(`Tính năng "${action}" đang được tích hợp để hỗ trợ học sinh tra cứu từ vựng và nhận gợi ý trực tiếp từ AI.`);
+        };
+
+        const game_createIconElement = (iconName, className) => { 
+            const icon = document.createElement('svg'); 
+            icon.setAttribute('data-lucide', iconName); 
+            icon.className = className; 
+            return icon; 
+        };
+        
+        // Render danh sách chọn kỹ năng ở cột trái
+        const game_renderSkillTabs = () => { 
+            const listDiv = document.createElement('div'); 
+            listDiv.className = "space-y-2"; 
+            Object.values(GAME_SKILLS).forEach(skill => { 
+                const active = game_state.activeSkillId === skill.id; 
+                const button = document.createElement('button'); 
+                button.onclick = () => game_handleSkillChange(skill.id); 
+                button.className = `w-full flex items-center justify-between p-3.5 rounded-xl transition-all font-medium text-left border ${ 
+                    active ? 'bg-indigo-600 text-white shadow-md border-indigo-600' : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border-gray-100' 
+                }`; 
+                
+                const span = document.createElement('span'); 
+                span.className = "font-semibold flex items-center text-sm"; 
+                span.textContent = skill.name; 
+                
+                const icon = game_createIconElement(skill.icon, `w-5 h-5 ${active ? 'text-white' : 'text-gray-500'}`); 
+                
+                button.appendChild(span); 
+                button.appendChild(icon); 
+                listDiv.appendChild(button); 
+            }); 
+            return listDiv; 
+        };
+        
+        // Render khu vực nhập/tải bài tập của học sinh
+        const game_renderTaskArea = () => { 
+            const container = document.createElement('div'); 
+            container.className = "space-y-4"; 
+            const currentSkill = GAME_SKILLS[game_state.activeSkillId]; 
+
+            // Cập nhật nhãn đang luyện trên header phải
+            const indicator = document.getElementById('current-skill-indicator');
+            if (indicator) indicator.textContent = `Đang luyện: ${currentSkill.name.split(' ')[0]}`;
+
+            const descBox = document.createElement('div');
+            descBox.className = "p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 text-xs text-indigo-800 font-medium";
+            descBox.textContent = `Mục đích: ${currentSkill.desc}`;
+            container.appendChild(descBox);
+
+            // Khu vực tải file hoặc dán văn bản
+            const uploadBox = document.createElement('div');
+            uploadBox.className = "flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200";
+            uploadBox.innerHTML = `
+                <span class="text-xs font-semibold text-gray-600 flex items-center">
+                    <svg data-lucide="upload" class="w-4 h-4 mr-1 text-indigo-600"></svg> Tải lên tệp văn bản (.txt):
+                </span>
+                <input type="file" id="exercise-file-input" accept=".txt" class="text-xs text-gray-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+            `;
+            container.appendChild(uploadBox);
+
+            setTimeout(() => {
+                const fileInput = document.getElementById('exercise-file-input');
+                if (fileInput) {
+                    fileInput.onchange = game_handleFileUpload;
+                }
+            }, 0);
+
+            // Ô textarea cho học sinh nhập hoặc dán nội dung bài tập
+            const textarea = document.createElement('textarea'); 
+            textarea.value = game_state.uploadedExercise; 
+            textarea.oninput = (e) => { game_state.uploadedExercise = e.target.value; }; 
+            textarea.rows = 4; 
+            textarea.placeholder = `Dán hoặc nhập nội dung bài tập / câu hỏi phần ${currentSkill.name} của bạn vào đây...`; 
+            textarea.className = "w-full p-3 text-gray-800 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"; 
+            container.appendChild(textarea); 
+
+            // Nút gửi bài
+            const btnGroup = document.createElement('div');
+            btnGroup.className = "flex justify-end pt-1";
+
+            const submitBtn = document.createElement('button'); 
+            submitBtn.onclick = game_submitExercise; 
+            submitBtn.disabled = game_state.isLoading; 
+            submitBtn.className = "bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow transition font-medium text-sm flex items-center"; 
+            submitBtn.innerHTML = game_state.isLoading ? `<svg data-lucide="loader-2" class="w-4 h-4 mr-2 animate-spin"></svg> Đang xử lý...` : `Gửi cho Trợ lý AI`; 
+            btnGroup.appendChild(submitBtn);
+            container.appendChild(btnGroup);
+
+            // Hiển thị phản hồi từ AI
+            if (game_state.feedback) { 
+                const feedbackDiv = document.createElement('div'); 
+                const type = game_state.feedback.type; 
+                const colorClass = type === 'success' ? 'bg-green-50 border-green-200 text-green-900' : 'bg-amber-50 border-amber-200 text-amber-900'; 
+                feedbackDiv.className = `p-4 rounded-xl border text-sm ${colorClass} space-y-2`; 
+                feedbackDiv.innerHTML = `<p class="font-bold flex items-center"><svg data-lucide="info" class="w-4 h-4 mr-1"></svg> Phản hồi từ Giáo viên AI:</p><div class="whitespace-pre-wrap">${game_state.feedback.message}</div>`; 
+                container.appendChild(feedbackDiv); 
+            } 
+
+            return container; 
+        };
+        
+        const game_renderApp = () => { 
+            const skillListContainer = document.getElementById('game-skill-list');
+            if (skillListContainer) {
+                skillListContainer.innerHTML = '';
+                skillListContainer.appendChild(game_renderSkillTabs());
+            }
+
+            const appContainer = document.getElementById('game-app-container'); 
+            if (!appContainer) return; 
+            
+            appContainer.innerHTML = '';
+            appContainer.appendChild(game_renderTaskArea());
+
+            if (window.lucide && window.lucide.createIcons) { 
+                window.lucide.createIcons(); 
+            } 
+        };
+
+        window.onload = function() {
+            initStats();
+            initCharts();
+            
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            const toggleSidebar = () => {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            };
+
+            if(mobileToggle) mobileToggle.addEventListener('click', toggleSidebar);
+            if(overlay) overlay.addEventListener('click', toggleSidebar);
+
+            document.querySelectorAll('.sidebar-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    const tabId = e.currentTarget.dataset.tab; 
+                    changeTab(tabId);
+                    if(history.pushState) {
+                        history.pushState(null, null, `#${tabId}`);
+                    } else {
+                        window.location.hash = tabId;
+                    }
+                });
+            });
+
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(`content-${hash}`)) {
+                changeTab(hash);
+            } else {
+                changeTab('overview');
+            }
+
+             if (window.lucide && window.lucide.createIcons) {
+                window.lucide.createIcons();
+            }
+        };
+    </script>
+</body>
+</html>
