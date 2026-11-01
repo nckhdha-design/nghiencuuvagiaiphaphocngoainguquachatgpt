@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ứng dụng nghiên cứu và giải pháp học ngoại ngữ </title>
+    <title>Ứng dụng nghiên cứu và giải pháp học ngoại ngữ - THCS Vạn Phúc</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script type="module">
@@ -82,6 +82,7 @@
 
     <div class="flex h-screen bg-slate-50">
 
+        <!-- SIDEBAR điều hướng -->
         <aside id="sidebar" class="w-64 bg-white shadow-xl h-full fixed md:static -translate-x-full md:translate-x-0 transition-transform z-30 overflow-y-auto">
             <div class="p-5 border-b">
                 <h2 class="text-xl font-bold text-indigo-700 flex items-center">
@@ -399,33 +400,105 @@
 
                 <!-- TAB GIỚI THIỆU -->
                 <div id="content-gioithieu" class="tab-content hidden space-y-8">
-                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
-                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Giới thiệu dự án</h2>
-                        <p class="text-gray-600 leading-relaxed">Chào mừng bạn đến với dự án nghiên cứu "Thái độ, nhận thức của học sinh phổ thông trong việc học ngoại ngữ qua ChatGPT".</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card space-y-6">
+                        <h2 class="text-3xl font-bold text-indigo-700">Giới thiệu dự án</h2>
+                        <p class="text-gray-600 leading-relaxed">Dự án khoa học kỹ thuật <strong>"Xây dựng Website – Nghiên cứu và Giải pháp cho Học sinh THCS Học Ngoại ngữ qua ChatGPT"</strong> được thực hiện bởi nhóm học sinh trường <strong>THCS Vạn Phúc</strong>.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            <div class="p-5 bg-indigo-50/60 rounded-xl border border-indigo-100">
+                                <h3 class="font-bold text-indigo-800 text-lg mb-2 flex items-center">
+                                    <svg data-lucide="target" class="w-5 h-5 mr-2 text-indigo-600"></svg> Mục đích nghiên cứu
+                                </h3>
+                                <p class="text-sm text-gray-700 leading-relaxed">Đánh giá thực trạng thái độ và nhận thức của học sinh THCS trong việc áp dụng AI vào học ngoại ngữ, từ đó xây dựng giải pháp phần mềm hỗ trợ học tập cá nhân hóa, an toàn và chống lười tư duy.</p>
+                            </div>
+                            
+                            <div class="p-5 bg-teal-50/60 rounded-xl border border-teal-100">
+                                <h3 class="font-bold text-teal-800 text-lg mb-2 flex items-center">
+                                    <svg data-lucide="cpu" class="w-5 h-5 mr-2 text-teal-600"></svg> Công nghệ ứng dụng
+                                </h3>
+                                <p class="text-sm text-gray-700 leading-relaxed">Website xây dựng trên nền tảng HTML5, Tailwind CSS, Chart.js, kết nối Google Gemini API thông qua Google Apps Script Proxy đảm bảo bảo mật tuyệt đối API Key.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- TAB HƯỚNG DẪN -->
                 <div id="content-huongdan" class="tab-content hidden space-y-8">
-                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
-                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Hướng dẫn sử dụng</h2>
-                        <p class="text-gray-600">Truy cập Góc luyện tập AI, chọn kỹ năng cần học và tự tải bài tập lên để AI hỗ trợ.</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card space-y-6">
+                        <h2 class="text-3xl font-bold text-indigo-700">Hướng dẫn sử dụng Website</h2>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center flex-shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Xem Dữ liệu Nghiên cứu & Biểu đồ</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Chọn mục <strong>"Tổng quan"</strong> hoặc <strong>"Dữ liệu nghiên cứu"</strong> ở thanh menu bên trái để theo dõi các chỉ số thống kê (PU, PEOU, AT, ERP) từ khảo sát N=100 học sinh.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center flex-shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Luyện tập cùng Giáo viên AI</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Truy cập mục <strong>"Góc luyện tập AI"</strong>, chọn 1 trong 4 kỹ năng (Nghe, Nói, Đọc, Viết) ở cột bên trái.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center flex-shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Nhập hoặc Tải bài tập cá nhân</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Dán trực tiếp câu hỏi/đoạn văn vào khung văn bản hoặc bấm nút <strong>"Tải lên tệp văn bản (.txt)"</strong> để tải bài tập từ máy tính, sau đó bấm <strong>"Gửi cho Trợ lý AI"</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- TAB HOẠT ĐỘNG MỞ -->
                 <div id="content-hoatdongmo" class="tab-content hidden space-y-8">
-                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
-                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Hoạt động mở rộng</h2>
-                        <p class="text-gray-600">Tích hợp thêm các dạng bài tập thực tế từ sách giáo khoa.</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card space-y-6">
+                        <h2 class="text-3xl font-bold text-indigo-700">Hoạt động mở rộng & Phát triển</h2>
+                        <p class="text-gray-600 leading-relaxed">Định hướng nâng cấp và mở rộng ứng dụng trong giai đoạn tiếp theo của dự án:</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold mb-3">
+                                    <svg data-lucide="mic" class="w-6 h-6"></svg>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Tích hợp Voice AI</h4>
+                                <p class="text-xs text-gray-500 mt-2">Bổ sung tính năng chuyển giọng nói thành văn bản (Speech-to-Text) giúp học sinh luyện phát âm và giao tiếp trực tiếp với AI.</p>
+                            </div>
+
+                            <div class="p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center text-teal-600 font-bold mb-3">
+                                    <svg data-lucide="library" class="w-4 h-4"></svg>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Kho đề thi SGK</h4>
+                                <p class="text-xs text-gray-500 mt-2">Xây dựng ngân hàng câu hỏi chuẩn hóa bám sát chương trình tiếng Anh THCS của Bộ Giáo dục và Đào tạo.</p>
+                            </div>
+
+                            <div class="p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 font-bold mb-3">
+                                    <svg data-lucide="smartphone" class="w-4 h-4"></svg>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Ứng dụng di động</h4>
+                                <p class="text-xs text-gray-500 mt-2">Đóng gói giải pháp thành ứng dụng đa nền tảng (PWA/Mobile App) giúp học sinh ôn tập mọi lúc mọi nơi.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- TAB LIÊN HỆ -->
                 <div id="content-lienhe" class="tab-content hidden space-y-8">
-                    <div class="bg-white p-6 sm:p-8 rounded-xl card">
-                        <h2 class="text-3xl font-bold mb-4 text-indigo-700">Liên hệ</h2>
-                        <p class="text-gray-600">Nhóm học sinh trường THCS Vạn Phúc.</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-xl card space-y-6">
+                        <h2 class="text-3xl font-bold text-indigo-700">Thông tin liên hệ</h2>
+                        <div class="space-y-3 text-gray-700">
+                            <p class="flex items-center"><svg data-lucide="school" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Đơn vị:</strong> Trường THCS Vạn Phúc</p>
+                            <p class="flex items-center"><svg data-lucide="users" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Nhóm tác giả thực hiện:</strong> Học sinh Lớp 9A1</p>
+                            <p class="flex items-center"><svg data-lucide="user-check" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Giáo viên hướng dẫn:</strong> Nguyễn Văn C</p>
+                            <p class="flex items-center"><svg data-lucide="globe" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Link trải nghiệm sản phẩm:</strong> <a href="https://nckhdhadesign.github.io/nghiencuuvagiaiphaphocngoainguquachatgpt/" target="_blank" class="text-indigo-600 hover:underline ml-1">nckhdhadesign.github.io</a></p>
+                        </div>
                     </div>
                 </div>
 
@@ -590,17 +663,28 @@
             const prompt = `Bạn là một giáo viên tiếng Anh AI chuyên nghiệp. Học sinh đang luyện tập kỹ năng [${currentSkill.name}] với nội dung bài tập/câu trả lời tự tải lên như sau:\n\n"""\n${game_state.uploadedExercise}\n"""\n\nHãy phân tích, nhận xét, sửa lỗi (nếu có) và đưa ra gợi ý cải thiện bằng tiếng Việt với giọng điệu thân thiện, khích lệ.`; 
             
             try { 
-                const response = await fetch(GAME_GEMINI_API_URL, { 
+                const response = await fetch(PROXY_URL, { 
                     method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) 
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+                    body: JSON.stringify({ prompt: prompt }) 
                 }); 
                 const result = await response.json(); 
-                const reviewText = result.candidates?.[0]?.content?.parts?.[0]?.text; 
+                
+                let reviewText = '';
+                if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+                    reviewText = result.candidates[0].content.parts[0].text;
+                } else if (result.text) {
+                    reviewText = result.text;
+                } else if (typeof result === 'string') {
+                    reviewText = result;
+                } else {
+                    reviewText = JSON.stringify(result);
+                }
+
                 game_setState({ feedback: { type: 'success', message: reviewText || 'Không nhận được phản hồi từ AI.' }, isLoading: false }); 
             } catch (error) { 
                 console.error('Lỗi khi gửi bài tập:', error); 
-                game_setState({ feedback: { type: 'error', message: 'Không thể kết nối đến API. Vui lòng kiểm tra lại.' }, isLoading: false }); 
+                game_setState({ feedback: { type: 'error', message: 'Không thể kết nối đến Máy chủ Proxy. Vui lòng kiểm tra lại đường link Google Apps Script.' }, isLoading: false }); 
             } 
         };
 
@@ -620,7 +704,19 @@
         };
 
         const game_handleToolAction = (action) => {
-            alert(`Tính năng "${action}" đang được tích hợp để hỗ trợ học sinh tra cứu từ vựng và nhận gợi ý trực tiếp từ AI.`);
+            const currentSkill = GAME_SKILLS[game_state.activeSkillId].name;
+            const templates = {
+                dictionary: `[Yêu cầu Tra từ]: Hãy trích xuất và giải thích nghĩa các từ vựng quan trọng/từ khó trong bài tập ${currentSkill} sau:\n`,
+                translate: `[Yêu cầu Dịch]: Hãy dịch hoàn chỉnh đoạn văn bản sau sang tiếng Việt tự nhiên:\n`,
+                hint: `[Yêu cầu Gợi ý]: Hãy đưa ra gợi ý/dàn ý hướng dẫn cách làm bài tập này chứ không cho đáp án trực tiếp:\n`,
+                save: `[Lưu từ vựng]: Hãy liệt kê 5 từ vựng tiếng Anh hay nhất trong bài tập này kèm phiên âm và câu ví dụ để em lưu vào sổ tay.`
+            };
+            
+            if (action === 'save') {
+                game_setState({ uploadedExercise: game_state.uploadedExercise + (game_state.uploadedExercise ? "\n\n" : "") + templates.save });
+            } else if (templates[action]) {
+                game_setState({ uploadedExercise: templates[action] + (game_state.uploadedExercise || "") });
+            }
         };
 
         const game_createIconElement = (iconName, className) => { 
