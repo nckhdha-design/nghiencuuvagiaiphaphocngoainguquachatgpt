@@ -416,7 +416,7 @@
                                 <h3 class="font-bold text-teal-800 text-lg mb-2 flex items-center">
                                     <svg data-lucide="cpu" class="w-5 h-5 mr-2 text-teal-600"></svg> Công nghệ ứng dụng
                                 </h3>
-                                <p class="text-sm text-gray-700 leading-relaxed">Website xây dựng trên nền tảng HTML5, Tailwind CSS, Chart.js, kết nối Google Gemini API thông qua Google Apps Script Proxy đảm bảo bảo mật tuyệt đối API Key.</p>
+                                <p class="text-sm text-gray-700 leading-relaxed">Website xây dựng trên nền tảng HTML5, Tailwind CSS, Chart.js, kết nối Google AI API thông qua Google Apps Script Proxy.</p>
                             </div>
                         </div>
                     </div>
@@ -439,7 +439,7 @@
                             <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
                                 <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center flex-shrink-0">2</div>
                                 <div>
-                                    <h4 class="font-semibold text-gray-800">Luyện tập cùng Giáo viên AI</h4>
+                                    <h4 class="font-semibold text-gray-800">Luyện tập cùng giáo viên AI</h4>
                                     <p class="text-sm text-gray-600 mt-1">Truy cập mục <strong>"Góc luyện tập AI"</strong>, chọn 1 trong 4 kỹ năng (Nghe, Nói, Đọc, Viết) ở cột bên trái.</p>
                                 </div>
                             </div>
@@ -448,7 +448,7 @@
                                 <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center flex-shrink-0">3</div>
                                 <div>
                                     <h4 class="font-semibold text-gray-800">Nhập hoặc tải bài tập cá nhân</h4>
-                                    <p class="text-sm text-gray-600 mt-1">Dán trực tiếp câu hỏi/đoạn văn vào khung văn bản hoặc bấm nút <strong>"Tải lên tệp văn bản (.txt)"</strong> để tải bài tập từ máy tính, sau đó bấm <strong>"Gửi cho Trợ lý AI"</strong>.</p>
+                                    <p class="text-sm text-gray-600 mt-1">Dán trực tiếp câu hỏi/đoạn văn vào khung văn bản hoặc bấm nút <strong>"Tải lên tệp văn bản (.txt)"</strong> để tải bài tập từ máy tính, sau đó bấm <strong>"Gửi cho trợ lý AI"</strong>.</p>
                                 </div>
                             </div>
                         </div>
@@ -495,8 +495,8 @@
                         <h2 class="text-3xl font-bold text-indigo-700">Thông tin liên hệ</h2>
                         <div class="space-y-3 text-gray-700">
                             <p class="flex items-center"><svg data-lucide="school" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Đơn vị:</strong> Trường THCS Vạn Phúc</p>
-                            <p class="flex items-center"><svg data-lucide="users" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Nhóm tác giả thực hiện:</strong> Học sinh Lớp 9A1</p>
-                            <p class="flex items-center"><svg data-lucide="user-check" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Giáo viên hướng dẫn:</strong> Nguyễn Văn C</p>
+                            <p class="flex items-center"><svg data-lucide="users" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Nhóm tác giả thực hiện:</strong> Phan Nguyễn Tường Vi, Nguyễn Nam Phong - Học sinh Lớp 9A10</p>
+                            <p class="flex items-center"><svg data-lucide="user-check" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Giáo viên hướng dẫn:</strong> Nguyễn Thu Huyền</p>
                             <p class="flex items-center"><svg data-lucide="globe" class="w-5 h-5 mr-3 text-indigo-600"></svg> <strong>Link trải nghiệm sản phẩm:</strong> <a href="https://nckhdhadesign.github.io/nghiencuuvagiaiphaphocngoainguquachatgpt/" target="_blank" class="text-indigo-600 hover:underline ml-1">nckhdhadesign.github.io</a></p>
                         </div>
                     </div>
@@ -801,7 +801,7 @@
             submitBtn.onclick = game_submitExercise; 
             submitBtn.disabled = game_state.isLoading; 
             submitBtn.className = "bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow transition font-medium text-sm flex items-center"; 
-            submitBtn.innerHTML = game_state.isLoading ? `<svg data-lucide="loader-2" class="w-4 h-4 mr-2 animate-spin"></svg> Đang xử lý...` : `Gửi cho Trợ lý AI`; 
+            submitBtn.innerHTML = game_state.isLoading ? `<svg data-lucide="loader-2" class="w-4 h-4 mr-2 animate-spin"></svg> Đang xử lý...` : `Gửi cho trợ lý AI`; 
             btnGroup.appendChild(submitBtn);
             container.appendChild(btnGroup);
 
